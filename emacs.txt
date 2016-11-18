@@ -55,3 +55,6 @@
 
 ; turn on automatic reparsing of open buffers in semantic
 (global-semantic-idle-scheduler-mode 1)
+
+; emacs tramp password
+(setq password-cache-expiry nil)
