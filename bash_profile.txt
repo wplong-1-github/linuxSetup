@@ -16,3 +16,77 @@ xmodmap ~/.Xmodmap
 
 # Configure TrackPoint
 source ~/.xsessionrc
+
+# shortcut to logbook
+alias logbook='emacs -nw /home/peilong/Project/logbook/peilongLogbook.txt'
+#alias logbook='libreoffice /home/peilong/Project/logbook/peilongLogbook.odt&'
+
+# shortcut for emacs
+alias e='emacs -nw'
+
+# ROOT environment setup
+source /home/peilong/Project/root/bin/thisroot.sh
+
+# copy_to.sh: copy file to ustb10 or ustb14
+#alias copy_to='/home/peilong/Project/copy_to.sh'
+function copy_to {
+    mydir=${PWD}
+
+    ustbname=$1
+    filename=$2
+
+    scp ${filename} ac.peilongw@atlas1.hep.anl.gov:~/
+    ssh ac.peilongw@atlas1.hep.anl.gov "scp ${filename} ac.peilongw@nathan:~/"
+    ssh -t ac.peilongw@atlas1.hep.anl.gov ssh -t ac.peilongw@nathan "scp ${filename} ac.peilongw@${ustbname}:~/"
+
+    cd $mydir
+}
+
+# login_to: login to ustb14, ustb10, nathan, atlas1
+function login_to {
+
+    serverName=$1
+
+    if [ ${serverName} == 'ustb10' ]
+    then
+	ssh -tX ac.peilongw@atlas1.hep.anl.gov ssh -tX ac.peilongw@nathan ssh -tX ac.peilongw@${serverName}
+    elif [ ${serverName} == 'ustb14' ]
+    then 
+	ssh -tX ac.peilongw@atlas1.hep.anl.gov ssh -tX ac.peilongw@nathan ssh -tX ac.peilongw@${serverName}
+    elif [ ${serverName} == 'nathan' ]
+    then 
+	ssh -tX ac.peilongw@atlas1.hep.anl.gov ssh -tX ac.peilongw@${serverName}
+    elif [ ${serverName} == 'atlas1' ]
+    then 
+	ssh ac.peilongw@atlas1.hep.anl.gov -CX
+    elif [ ${serverName} == 'lxplus' ]
+    then 
+	ssh pewang@lxplus.cern.ch -CX
+    elif [ ${serverName} == 'maneframe' ]
+    then 
+	ssh peilongw@mflogin03.hpc.smu.edu -CX
+    fi
+
+}
+
+
+function copy_from {
+
+    serverName=$1
+    sourceLocation=$2
+    localLocation=$3
+
+    if [ ${serverName} == 'atlas1' ]
+    then 
+	scp ac.peilongw@atlas1.hep.anl.gov:${sourceLocation} ${localLocation}
+    elif [ ${serverName} == 'lxplus' ]
+    then 
+	scp pewang@lxplus.cern.ch:${sourceLocation} ${localLocation}
+    elif [ ${serverName} == 'maneframe' ]
+    then 
+	scp peilongw@mflogin03.hpc.smu.edu:${sourceLocation} ${localLocation}
+    fi
+
+}
+
+
